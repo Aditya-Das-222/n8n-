@@ -1,0 +1,105 @@
+{
+  "createdAt": "2025-08-31T16:15:02.922Z",
+  "updatedAt": "2025-08-31T16:51:33.000Z",
+  "id": "98ZJyCyGxXlXzVaY",
+  "name": "UGC Full Video",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        368,
+        128
+      ],
+      "id": "bb17ed3a-c234-4d5b-9c45-3d8a961f8f6a",
+      "name": "Telegram Trigger",
+      "webhookId": "9c8ee30a-f3c3-4e2a-bf69-7bc146b07472",
+      "credentials": {
+        "telegramApi": {
+          "id": "uK2pnp48djp1kdZO",
+          "name": "Rendom Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "= https://api.telegram.org/bot{{ $('Bot ID').item.json['bot id'] }}/getFile?file_id={{ $('Telegram Trigger').item.json.message.from.id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        768,
+        128
+      ],
+      "id": "f13b0147-13dc-4aff-bb6c-83571ed52946",
+      "name": "GET Bot ID "
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8f3c8a31-b75a-4af0-a924-0dafeb9d8ec0",
+              "name": "=bot id",
+              "value": "=8418956413:AAEOTAPposMU0_h2q159b7IyLVFWzr0EUDo",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        592,
+        128
+      ],
+      "id": "79e42565-48d5-47f8-a758-913b8964b219",
+      "name": "Bot ID"
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Bot ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bot ID": {
+      "main": [
+        [
+          {
+            "node": "GET Bot ID ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "c2147add-bc26-4777-ab8a-11075091af72",
+  "triggerCount": 0,
+  "tags": []
+}
