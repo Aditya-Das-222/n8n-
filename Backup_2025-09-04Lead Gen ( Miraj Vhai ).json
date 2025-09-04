@@ -1,0 +1,1347 @@
+{
+  "createdAt": "2025-08-15T13:43:04.179Z",
+  "updatedAt": "2025-08-17T19:35:44.000Z",
+  "id": "AN5VPgt9CXH7jCsu",
+  "name": "Lead Gen ( Miraj Vhai )",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1840,
+        1024
+      ],
+      "id": "694b5f71-7acf-4ef9-b6ba-31ad7c164dee",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1184,
+        1024
+      ],
+      "id": "f4dff075-b0fc-4980-bd23-f23783f6b06d",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-3.5-turbo",
+          "mode": "list",
+          "cachedResultName": "gpt-3.5-turbo"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        64,
+        1072
+      ],
+      "id": "6a73b099-b340-46b0-90a9-c2dad8043526",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "NSQH7jdDrTIGJRAn",
+          "name": "Automation learner pro"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "\n{\n  \"email1\": {\n    \"subject\": \"TEXT-HERE\",\n    \"body\": \"HTML-HERE\"\n  },\n  \"email2\": {\n    \"subject\": \"TEXT-HERE\",\n    \"body\": \"HTML-HERE\"\n  },\n\"Lead\": {\n\"Score\":\"write here lead score( like 0-30 as cold lead, 31-70 as warm lead and 71-100 as Hot lead)\",\n\"Status\": \"Cold/warm/Hot\"\n}\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        1072
+      ],
+      "id": "a97e3a40-b6c9-499c-9664-cc5105d819ec",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "chatgpt-4o-latest",
+          "mode": "list",
+          "cachedResultName": "CHATGPT-4O-LATEST"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=# Overview\nYou are part of the cold email team at MM-Automation, which is an AI Automation Agency. \n\nMM's offers the following services: \n- Business Automation: Automating internal business processes to save time, money or reduce error. \n- Marketing Automation: Automating marketing processes like SEO, cold email etc, to generate leads with minimal investment of time or money. \n- Automation Consulting: Advice on automating various processes. \n\n# Task\nYour job is to analyse the research found on a prospect, in preparation for a cold email. \nFor each prospect you must find the following: \n\n1. Personalization opportunity:Cold emails perform much better when personalized. You must analyse the research found on the prospect to identify the top personalization opportunities.The personalization can be one of the following: \n- Referencing content they’ve posted [best one].\n- Mentioning a specific achievement or news related to themselves or their business.\n- personalized compliment or observation about the recipient’s work.\n- Mentioning unique aspects of their professional background. \nThe references must be highly specific that couldn't be mass-generated. Adding each reference to the cold email should feel like a 1 to 1 communication, showing we've done our research on the prospect. Aim: Reader thinks “Whoa, this is for me.” If you can't find any good personalization opportunities, then leave this blank. \n\n\n2. Pain points and solutions: Analyse the research to identify the prospects biggest pain points. Take into consideration their role, their company details and all other research to predict what their biggest bottle necks are. Then think of these pain points in terms of Kamexa's services - Which ones can we solve? List the 2 biggest pain points that we can help with and define the actionable solution we can offer them. Turn the actionable solution into a clear and concise offer. \n- The solutions should be specific offerings, not broad services. So instead of saying \"automation\", you must clearly define exactly what process will be automated.\n\n\n# Output Format \nYour output must be in the following format: \n\nPersonalization\n1. Opportunity: HERE\nSupporting Evidence: HERE\n\n2. Opportunity: HERE\nSupporting Evidence: HERE\n\n(…add more as needed)\n\n⸻\n\nPain Points & Solutions\n1. Pain Point: HERE\nSupporting Evidence: HERE\nOffer: HERE\n\n2. Pain Point: HERE\nSupporting Evidence: HERE\nOffer: HERE\n\nWhere supporting evidence is where you must include specific examples and evidence from the research that support your findings. You must give enough detail in the HERE sections so the reader does not need to revisit the research to create a cold email.\nThe opportunities should also be explained in detail, so the reader has enough context to understand the opportunity. So for example, instead of saying \"news A\", you must explain exactly what \"news A\" entitles and why it's significant. \n\n- Don't output anything else.\n- Replace HERE with the relevant string.\n- If there are no clear personalization opportunities, then replace HERE with null. \n- Make sure your outputs are well thought out. \n\n# Complete the analysis for the following prospect. \n\nResearch: \n\n\n\n2. Company research from searching the web: \n{{ $json.choices[0].message.content }}\n\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -304,
+        848
+      ],
+      "id": "6a9a22f7-5784-4208-a278-d6ef5215bfc1",
+      "name": "Analyze",
+      "credentials": {
+        "openAiApi": {
+          "id": "NSQH7jdDrTIGJRAn",
+          "name": "Automation learner pro"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Task: New prospect\nThere's a new prospect. Create the emails by considering the following details: \n\nProspect Details: \n\nFirst Name:{{ $('Update record1').item.json.fields['First Name'] }}\n\nLast Name:{{ $('Update record1').item.json.fields['Last Name'] }}\n\nTitle:{{ $('Update record1').item.json.fields.Title }}\n\nCompany Name:{{ $('Update record1').item.json.fields['Company Name'] }}\n\nEmail:{{ $('Update record1').item.json.fields.Email }}\n\nIndustry:{{ $('Update record1').item.json.fields.Industry }}\n\nCountry: {{ $('Update record1').item.json.fields.Country }}\n\n\nAnalyzation: {{ $json.message.content }}\n\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are part of the cold email team for MM-Automation, which is an AI Automation Agency offering process automation, marketing automation and automation consulting to businesses around the world. \n\nYour main job is:\n\n1.  Scoring the perspect based one details and Research ( like 0-30 as cold lead, 31-70 as warm lead and 71 to 100 as Hot lead)\n\n2.To create 3 emails given the following info about a new cold lead: \n\n- Research: Findings about the prospect by researching them on social media and       the web. \n- Analysis: Insights extracted from analysing the research. \n- Tactic: Strategy to create the cold emails. \n\nYour job is to create a cold email sequence of 3 emails which will be sent 3 days apart. The tactic for each email should closely follow the instructions below, whilst the content of each email must follow the research and analysis. \n\n\n# Tactic: \n\n1. Email#1: \n\n1.1 Subject line: \n\nThe email subject line should : \n- Be maximum 10-15 words \n- Include the prospects name or company name (choose based on context) when possible without sounding unnatural \n- Never include spam trigger words like “free,” “guarantee,” “no obligation,” \"price,\" \"100%\" \"sale,\" and excessive punctuation, which can trigger spam filters. \n- Create curiousity without sounding spammy or like we're selling them anything \n\n\n1.2 Body\n\nStructure: The email must follow this structure closely:\na) Hook: The first 2 or 3 sentences of the email is a hook. The hook should be the personalization part of the email, capturing the prospects attention so they don't scroll. \nb) Pain point: After the hook, you must outline a pain point that was analysed about the prospect. This shouldn't sound salesy, but should be directly related to their business. The goal is to capture the readers attention, not sell them a solution. \nc) CTA: Say you've been working on solving that problem and would love to share your insights over a quick 15 minute call on. Have a clear next step for them (for example \"Should I book you in?).  add a calendly link with every email: https://calendly.com/10xcubemiraj/book-a-meeting, so that prespective can esily can book a call.\n\n\nGuidelines -  The email body should:\n\n- maximum 300 words.\n- Have short paragraphs ( 2 or 3 sentences in each) to include white space. \n- Use a conversational tone to keep the email casual. \n- Be \"You\" focused, incorporating \"you\" as much as possible.\n- Be in 6th-grade reading level with simple language. \n- Avoid images, attachments, videos, custom code, spammy words above, bullet points, punctuation.\n- Not have absurd claims (it should be believable).\n- Should always start with \"Hey ,{{ $('Update record1').item.json.fields['First Name'] }}\"\n- Should be concise. \n- Never start with formal openers like \"Hope you're doing well\" (Get right into the email every time).\n- Be nice and inviting.\n- End with \"Kind regards, Miraj\"\n\n\n2. Email#2: \nThis email will be in the same structure as email#1 and is considered a follow-up email of email#1.\n\n\n3. Email#3: \n\nthis email should follow the same structure, guidelines of Email#1, & it is the last and final email with the following differences: \n- It should mention a different pain point identified. \n- Should be like you already know them from the previous conversation, so it shouldn't include any personalisation other than the prospects name. Can start with a variation of I was thinking about {Prospect Company Name} again and...\n\n\n#CTA: The call to action should include the following calendly link in every emails so the prospect can book a time that suits: https://calendly.com/10xcubemiraj/book-a-meeting\n\n# Rules - Other things to consider: \n- Your goal is to create an engaging email that will get us a reply. Choose the best pain points and personalization opportunities from the analysis to achieve this objective. \n- You must closely follow the guidelines provided for each email. \n- Never come across condescending or rude when mentioning the pain point. \n- When using the personalization opportunities from the analysis, always mention where the info was found - usually  \"Online\" or \"LinkedIn\" (look at Supporting Evidence for this).\n\n# Output format\nYour output must follow this JSON format: \n\n{\n  \"email1\": {\n    \"subject\": \"TEXT-HERE\",\n    \"body\": \"HTML-HERE\"\n  },\n  \"email2\": {\n    \"subject\": \"TEXT-HERE\",\n    \"body\": \"HTML-HERE\"\n  },\n  \"email3\": {\n    \"subject\": \"HERE\",\n    \"body\": \"HTML-HERE\"\n  },\n\"Lead\": {\n\"Score\":\"write here lead score( like 0-30 as cold lead, 31-70 as warm lead and 71-100 as Hot lead)\"\n\"Status\": \"Cold/warm/Hot\"\n}\n}\n\n- Don't wrap the output in ```json```. \n- Don't output anything else. \n- Keep the HTML code to a minimum by using only <br> for line breaks and nothing else.\n\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        112,
+        848
+      ],
+      "id": "ae76483a-fa80-44c5-ba12-1d3a0e746481",
+      "name": "Dynamic Personalized Email"
+    },
+    {
+      "parameters": {
+        "maxItems": 3
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -1392,
+        1024
+      ],
+      "id": "bd1bd05f-94dd-4686-820e-009dd9a31d3d",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"sonar\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a researcher in a business development team. Your job is to find as much research as you can about a prospect company. You must ensure your research is for the correct company and is highly accurate. Your research must always include what the prospect company does in detail. Your research should also highlight any recent news or accomplishments from the company.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Find as much info as you can about the person. Person linkedin url: {{ $json.fields['Personal Linkedin Url'] }}}} This is their website URL:{{ $json.fields['Website '] }} . Make sure your research is 100% related to them.\"\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        256,
+        368
+      ],
+      "id": "32d69e48-ce8f-4967-8745-df1a9177ce26",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1456,
+        336
+      ],
+      "id": "622c6dd2-20ea-4a18-9dda-2094b4a121a0",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1264,
+        544
+      ],
+      "id": "e50dac9a-b1f3-424a-8a1e-64b828e0e623",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "NSQH7jdDrTIGJRAn",
+          "name": "Automation learner pro"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"Sub\": \"Write here report subject\",\n\"Email Body\": \"Write here a full report in a professional way\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -800,
+        544
+      ],
+      "id": "319e7a83-5ca3-45a9-8dae-67ea8ad53a62",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert sales and marketing data analyst with deep knowledge of Airtable systems. Your purpose is to extract lead data and ROI metrics from Airtable, analyze the information, and generate comprehensive executive reports with actionable insights.\n\n## Tools\n\n1. Airtable CRM: stored all leads data\n2. Airtable ROI: All ROI information stored hered\n\nOut put as:\n1. PDF-style formatted report with:\n   - Clean data visualizations\n   - Annotated insights\n   - Actionable recommendations\n2. Optional supplemental files:\n   - Raw data export\n   - Interactive dashboard \n   - Presentation slides\n\n## Add Analytic Dashboard and Roi Dashboard in every Report:\nAnalytic Dashoard: https://airtable.com/appVowJ94PeZWh3iv/pag4k7mcKkVUbvXwY\nROI Dashboard: https://airtable.com/appVowJ94PeZWh3iv/pagbv97HV6WOWxvdv/edit\n\nOut as Format: \n\"Sub\":\"Write here report subject\"\n\"Email Body\" : Write here full report in a professonal way\"",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -1152,
+        336
+      ],
+      "id": "5f6bce33-ec28-43ab-82b3-f52b383169a5",
+      "name": "Report Generate Agent"
+    },
+    {
+      "parameters": {
+        "content": "Email Verification\n",
+        "height": 520,
+        "width": 180,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -992,
+        752
+      ],
+      "id": "7fd2c30a-1594-4277-97a5-125badd441fb",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "Lead research and enrichment\n",
+        "height": 520,
+        "width": 560,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -576,
+        752
+      ],
+      "id": "a91911ea-f6de-485a-9b51-81c80330a5a9",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "Personalized Follow-Up Email Writing \nAI-powered intelligent lead scoring system\n",
+        "height": 520,
+        "width": 640,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1216,
+        752
+      ],
+      "id": "57367e96-c915-44f4-a7be-96772521c71f",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 520,
+        "width": 2560,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1920,
+        752
+      ],
+      "id": "e25c7322-2c58-4d9a-af41-572bd0ca84de",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "Data Pull From Airtable CRM",
+        "height": 520,
+        "width": 180,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1664,
+        752
+      ],
+      "id": "6e3211d1-b80b-4c23-a194-58239ae4caf1",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Advanced reporting \nROI tracking\nPerformance analytics dashboard\n\n",
+        "height": 420,
+        "width": 1540,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1744,
+        304
+      ],
+      "id": "008a6717-a756-4005-9f12-b63b5f794714",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appVowJ94PeZWh3iv",
+          "mode": "list",
+          "cachedResultName": "Lead Generation & CRM System- 1 ",
+          "cachedResultUrl": "https://airtable.com/appVowJ94PeZWh3iv"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblxUXHiWWWDtoQdB",
+          "mode": "list",
+          "cachedResultName": "LinkedIn Lead Details",
+          "cachedResultUrl": "https://airtable.com/appVowJ94PeZWh3iv/tblxUXHiWWWDtoQdB"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        -1104,
+        544
+      ],
+      "id": "2dafed85-72f9-4a4a-9841-f979c8d5fe0a",
+      "name": "Search records in Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "rSNIhezu0OsOBSGS",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appCcdFFiIOlHnKXU",
+          "mode": "list",
+          "cachedResultName": "Lead Gen and CRM",
+          "cachedResultUrl": "https://airtable.com/appCcdFFiIOlHnKXU"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblqKfGWYF3I4pZCw",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appCcdFFiIOlHnKXU/tblqKfGWYF3I4pZCw"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Update record1').item.json.fields.Email }}",
+            "Email 1": "={{ $json.output.email1.body }}",
+            "Email 1 Subject": "={{ $json.output.email1.subject }}",
+            "Email 2": "={{ $json.output.email2.body }}",
+            "Lead Score": "={{ $json.output.Lead.Score }}",
+            "Email 2 subject": "={{ $json.output.email2.subject }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Lead Score",
+              "displayName": "Lead Score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Todo",
+                  "value": "Todo"
+                },
+                {
+                  "name": "In progress",
+                  "value": "In progress"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 1",
+              "displayName": "Email 1",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email 1 Subject",
+              "displayName": "Email 1 Subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email 2",
+              "displayName": "Email 2",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email 2 subject",
+              "displayName": "Email 2 subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        464,
+        1024
+      ],
+      "id": "29ed02fc-fd8a-4898-a953-47833e582cb7",
+      "name": "Update record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "rSNIhezu0OsOBSGS",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://app.emailverify.io/api/v1/validate?key=A40ewdHZR7jPZctzkm6NW5Wxq9Io0Ist&email={{ $json.Email }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -912,
+        944
+      ],
+      "id": "19176b5d-c6ed-4657-be67-38b47cfbf271",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appCcdFFiIOlHnKXU",
+          "mode": "list",
+          "cachedResultName": "Lead Gen and CRM",
+          "cachedResultUrl": "https://airtable.com/appCcdFFiIOlHnKXU"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblqKfGWYF3I4pZCw",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appCcdFFiIOlHnKXU/tblqKfGWYF3I4pZCw"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -1616,
+        1024
+      ],
+      "id": "5d8af981-ce12-4e32-8d17-4ca65b58aa4f",
+      "name": "Search records",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "rSNIhezu0OsOBSGS",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appCcdFFiIOlHnKXU",
+          "mode": "list",
+          "cachedResultName": "Lead Gen and CRM",
+          "cachedResultUrl": "https://airtable.com/appCcdFFiIOlHnKXU"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblqKfGWYF3I4pZCw",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appCcdFFiIOlHnKXU/tblqKfGWYF3I4pZCw"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $json.email }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Lead Score",
+              "displayName": "Lead Score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Todo",
+                  "value": "Todo"
+                },
+                {
+                  "name": "In progress",
+                  "value": "In progress"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 1",
+              "displayName": "Email 1",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 1 Subject",
+              "displayName": "Email 1 Subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 2",
+              "displayName": "Email 2",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -736,
+        960
+      ],
+      "id": "52b8bed1-54e1-4c3e-9413-0240076fe598",
+      "name": "Update record1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "rSNIhezu0OsOBSGS",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appCcdFFiIOlHnKXU",
+          "mode": "list",
+          "cachedResultName": "Lead Gen and CRM",
+          "cachedResultUrl": "https://airtable.com/appCcdFFiIOlHnKXU"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblqKfGWYF3I4pZCw",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appCcdFFiIOlHnKXU/tblqKfGWYF3I4pZCw"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Update record1').item.json.fields.Email }}",
+            "Research": "={{ $json.choices[0].message.content }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email Status",
+              "displayName": "Email Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Personal Linkedin Url",
+              "displayName": "Personal Linkedin Url",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Website ",
+              "displayName": "Website ",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Country",
+              "displayName": "Country",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Research",
+              "displayName": "Research",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Lead Score",
+              "displayName": "Lead Score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 1",
+              "displayName": "Email 1",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 1 Subject",
+              "displayName": "Email 1 Subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 2",
+              "displayName": "Email 2",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 2 Subject",
+              "displayName": "Email 2 Subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 3",
+              "displayName": "Email 3",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 3 subject",
+              "displayName": "Email 3 subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 1 Send?",
+              "displayName": "Email 1 Send?",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Massage ID",
+              "displayName": "Massage ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 1 Reply?",
+              "displayName": "Email 1 Reply?",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 2 sent?",
+              "displayName": "Email 2 sent?",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 2 Reply?",
+              "displayName": "Email 2 Reply?",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 3 Send ?",
+              "displayName": "Email 3 Send ?",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email 3 Reply ?",
+              "displayName": "Email 3 Reply ?",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -224,
+        1056
+      ],
+      "id": "d1959a5b-3e5b-4bb4-9e31-4d8751f06b09",
+      "name": "Update record2",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "rSNIhezu0OsOBSGS",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appVowJ94PeZWh3iv",
+          "mode": "list",
+          "cachedResultName": "Lead Generation & CRM System- 1 ",
+          "cachedResultUrl": "https://airtable.com/appVowJ94PeZWh3iv"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblC1acRyc9yca3Pc",
+          "mode": "list",
+          "cachedResultName": "ROI Analysis and Tracking",
+          "cachedResultUrl": "https://airtable.com/appVowJ94PeZWh3iv/tblC1acRyc9yca3Pc"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        -960,
+        544
+      ],
+      "id": "742f7c92-0411-4bae-81ba-67c4fe7e8b8f",
+      "name": "Search records in Airtable1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "rSNIhezu0OsOBSGS",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "aditya.das.own@gmail.com",
+        "subject": "={{ $json.output.Sub }}",
+        "emailType": "text",
+        "message": "={{ $json.output['Email Body'] }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -672,
+        336
+      ],
+      "id": "fe67747e-d008-420e-bf5d-5d2c3da92134",
+      "name": "Send a message",
+      "webhookId": "406caebc-172f-4c3e-9274-2088a8f3a735",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Akfxp65UCevrEpLh",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "additionalFields": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-serpapi.serpApi",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        944
+      ],
+      "id": "0b8d6f42-8969-4934-9da7-1fc37e649ed2",
+      "name": "Google search",
+      "credentials": {
+        "serpApi": {
+          "id": "jWgbc0t1BZMeAXfs",
+          "name": "SerpApi account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Dynamic Personalized Email",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Dynamic Personalized Email",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze": {
+      "main": [
+        [
+          {
+            "node": "Dynamic Personalized Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dynamic Personalized Email": {
+      "main": [
+        [
+          {
+            "node": "Update record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Report Generate Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Report Generate Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Report Generate Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Report Generate Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Airtable": {
+      "ai_tool": [
+        [
+          {
+            "node": "Report Generate Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update record": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Update record1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update record1": {
+      "main": [
+        [
+          {
+            "node": "Google search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Airtable1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Report Generate Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google search": {
+      "main": [
+        [
+          {
+            "node": "Analyze",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update record2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "b28ca1d3-5354-457b-aa3b-ef1a03994baf",
+  "triggerCount": 0,
+  "tags": []
+}
